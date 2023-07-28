@@ -1,0 +1,5 @@
+codebook.aux
+codebook.log
+codebook.toc
+*/*.exe
+*/*.out
