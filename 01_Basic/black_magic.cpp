@@ -1,6 +1,9 @@
 #include <ext/pb_ds/assoc_container.hpp> //rb_tree
 #include <ext/pb_ds/priority_queue.hpp>
+#include <bits/stdc++.h>
 using namespace __gnu_pbds;
+using namespace std;
+#define ll long long
 typedef __gnu_pbds::priority_queue<int> heap;
 int main() {
   heap h1, h2;
