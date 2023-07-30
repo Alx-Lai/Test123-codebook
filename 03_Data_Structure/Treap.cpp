@@ -1,75 +1,54 @@
-struct node {
-  int data, sz;
-  node *l, *r;
-  node(int k) : data(k), sz(1), l(0), r(0) {}
-  void up() {
-    sz = 1;
-    if (l)
-      sz += l->sz;
-    if (r)
-      sz += r->sz;
+// Zerojudge a063: subsequence reversal
+struct Treap {
+  Treap *lc, *rc;
+  int pri, sz, val;
+  bool tag;
+  mt19937 mt;
+  Treap(int x) {
+    lc = rc = nullptr;
+    pri = mt(), sz = 1, val = x, tag = 0;
   }
-  void down() {}
 };
-int sz(node *a) { return a ? a->sz : 0; }
-node *merge(node *a, node *b) {
+inline int size(Treap *t) { return t ? t->sz : 0; }
+inline void pull(Treap *t) { t->sz = size(t->lc) + 1 + size(t->rc); }
+void push(Treap *t) {
+  if (t->tag) {
+    swap(t->lc, t->rc);
+    if (t->lc)
+      t->lc->tag = !t->lc->tag;
+    if (t->rc)
+      t->rc->tag = !t->rc->tag;
+    t->tag = 0;
+  }
+}
+Treap *merge(Treap *a, Treap *b) {
   if (!a || !b)
     return a ? a : b;
-  if (rand() % (sz(a) + sz(b)) < sz(a))
-    return a->down(), a->r = merge(a->r, b), a->up(), a;
-  return b->down(), b->l = merge(a, b->l), b->up(), b;
-}
-void split(node *o, node *&a, node *&b, int k) {
-  if (!o)
-    return a = b = 0, void();
-  o->down();
-  if (o->data <= k)
-    a = o, split(o->r, a->r, b, k), a->up();
-  else
-    b = o, split(o->l, a, b->l, k), b->up();
-}
-void split2(node *o, node *&a, node *&b, int k) {
-  if (sz(o) <= k)
-    return a = o, b = 0, void();
-  o->down();
-  if (sz(o->l) + 1 <= k)
-    a = o, split2(o->r, a->r, b, k - sz(o->l) - 1);
-  else
-    b = o, split2(o->l, a, b->l, k);
-  o->up();
-}
-node *kth(node *o, int k) {
-  if (k <= sz(o->l))
-    return kth(o->l, k);
-  if (k == sz(o->l) + 1)
-    return o;
-  return kth(o->r, k - sz(o->l) - 1);
-}
-int Rank(node *o, int key) {
-  if (o->data < key)
-    return sz(o->l) + 1 + Rank(o->r, key);
-  else
-    return Rank(o->l, key);
-}
-bool erase(node *&o, int k) {
-  if (!o)
-    return 0;
-  if (o->data == k) {
-    node *t = o;
-    o->down(), o = merge(o->l, o->r);
-    delete t;
-    return 1;
+  if (a->pri > b->pri) {
+    push(a);
+    a->rc = merge(a->rc, b);
+    pull(a);
+    return a;
+  } else {
+    push(b);
+    b->lc = merge(a, b->lc);
+    pull(b);
+    return b;
   }
-  node *&t = k < o->data ? o->l : o->r;
-  return erase(t, k) ? o->up(), 1 : 0;
 }
-void insert(node *&o, int k) {
-  node *a, *b;
-  split(o, a, b, k), o = merge(a, merge(new node(k), b));
-}
-void interval(node *&o, int l, int r) {
-  node *a, *b, *c;
-  split2(o, a, b, l - 1), split2(b, b, c, r);
-  // operate
-  o = merge(a, merge(b, c));
+void split(Treap *t, int k, Treap *&a, Treap *&b) {
+  if (!t)
+    a = b = nullptr;
+  else {
+    push(t);
+    if (size(t->lc) + 1 <= k) {
+      a = t;
+      split(t->rc, k - size(t->lc) - 1, a->rc, b);
+      pull(a);
+    } else {
+      b = t;
+      split(t->lc, k, a, b->lc);
+      pull(b);
+    }
+  }
 }
