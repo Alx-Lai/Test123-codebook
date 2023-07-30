@@ -1,3 +1,4 @@
+// find Strong Connected Component
 vector<pii> edge[100020], redge[100020];
 int vis[100020], scc[100020];
 void dfs1(int x, vector<int> &stk) {

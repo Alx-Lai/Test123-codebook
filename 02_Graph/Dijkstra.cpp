@@ -3,7 +3,7 @@ vector<pii> edge[100020];
 int dis[100020];
 int vis[100020];
 void dijkstra(int s) {
-  CLR(dis, 0x3f);
+  memset(dis, 0x3f, sizeof(dis));
   dis[s] = 0;
   priority_queue<pii, vector<pii>, greater<pii>> pq;
   pq.emplace(0, s);
