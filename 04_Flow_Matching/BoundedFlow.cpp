@@ -1,4 +1,4 @@
-struct BoundedFlow { // 0-base
+struct BoundedFlow {  // 0-base
   struct edge {
     int to, cap, flow, rev;
   };
@@ -6,8 +6,7 @@ struct BoundedFlow { // 0-base
   int n, s, t, dis[N], cur[N], cnt[N];
   void init(int _n) {
     n = _n;
-    for (int i = 0; i < n + 2; ++i)
-      G[i].clear(), cnt[i] = 0;
+    for (int i = 0; i < n + 2; ++i) G[i].clear(), cnt[i] = 0;
   }
   void add_edge(int u, int v, int lcap, int rcap) {
     cnt[u] -= lcap, cnt[v] += lcap;
@@ -19,8 +18,7 @@ struct BoundedFlow { // 0-base
     G[v].pb(edge{u, 0, 0, SZ(G[u]) - 1});
   }
   int dfs(int u, int cap) {
-    if (u == t || !cap)
-      return cap;
+    if (u == t || !cap) return cap;
     for (int &i = cur[u]; i < SZ(G[u]); ++i) {
       edge &e = G[u][i];
       if (dis[e.to] == dis[u] + 1 && e.cap != e.flow) {
@@ -42,8 +40,7 @@ struct BoundedFlow { // 0-base
       int u = q.front();
       q.pop();
       for (edge &e : G[u])
-        if (!~dis[e.to] && e.flow != e.cap)
-          q.push(e.to), dis[e.to] = dis[u] + 1;
+        if (!~dis[e.to] && e.flow != e.cap) q.push(e.to), dis[e.to] = dis[u] + 1;
     }
     return dis[t] != -1;
   }
@@ -52,8 +49,7 @@ struct BoundedFlow { // 0-base
     int flow = 0, df;
     while (bfs()) {
       fill_n(cur, n + 3, 0);
-      while ((df = dfs(s, INF)))
-        flow += df;
+      while ((df = dfs(s, INF))) flow += df;
     }
     return flow;
   }
@@ -64,8 +60,7 @@ struct BoundedFlow { // 0-base
         add_edge(n + 1, i, cnt[i]), sum += cnt[i];
       else if (cnt[i] < 0)
         add_edge(i, n + 2, -cnt[i]);
-    if (sum != maxflow(n + 1, n + 2))
-      sum = -1;
+    if (sum != maxflow(n + 1, n + 2)) sum = -1;
     for (int i = 0; i < n; ++i)
       if (cnt[i] > 0)
         G[n + 1].pop_back(), G[i].pop_back();
@@ -75,8 +70,7 @@ struct BoundedFlow { // 0-base
   }
   int solve(int _s, int _t) {
     add_edge(_t, _s, INF);
-    if (!solve())
-      return -1; // invalid flow
+    if (!solve()) return -1;  // invalid flow
     int x = G[_t].back().flow;
     return G[_t].pop_back(), G[_s].pop_back(), x;
   }

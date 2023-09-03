@@ -1,13 +1,11 @@
 #define TRAV(i, link, start) for (int i = link[start]; i != start; i = link[i])
-template <bool A, bool B = !A> // A: Exact
+template <bool A, bool B = !A>  // A: Exact
 struct DLX {
-  int lt[NN], rg[NN], up[NN], dn[NN], cl[NN], rw[NN], bt[NN], s[NN], head, sz,
-      ans;
+  int lt[NN], rg[NN], up[NN], dn[NN], cl[NN], rw[NN], bt[NN], s[NN], head, sz, ans;
   int columns;
   bool vis[NN];
   void remove(int c) {
-    if (A)
-      lt[rg[c]] = lt[c], rg[lt[c]] = rg[c];
+    if (A) lt[rg[c]] = lt[c], rg[lt[c]] = rg[c];
     TRAV(i, dn, c) {
       if (A) {
         TRAV(j, rg, i)
@@ -26,8 +24,7 @@ struct DLX {
         lt[rg[i]] = rg[lt[i]] = i;
       }
     }
-    if (A)
-      lt[rg[c]] = c, rg[lt[c]] = c;
+    if (A) lt[rg[c]] = c, rg[lt[c]] = c;
   }
   void init(int c) {
     columns = c;
@@ -42,8 +39,7 @@ struct DLX {
     head = c, sz = c + 1;
   }
   void insert(int r, const vector<int> &col) {
-    if (col.empty())
-      return;
+    if (col.empty()) return;
     int f = sz;
     for (int i = 0; i < (int)col.size(); ++i) {
       int c = col[i], v = sz++;
@@ -52,8 +48,7 @@ struct DLX {
       rg[v] = (i + 1 == (int)col.size() ? f : v + 1);
       rw[v] = r, cl[v] = c;
       ++s[c];
-      if (i > 0)
-        lt[v] = v - 1;
+      if (i > 0) lt[v] = v - 1;
     }
     lt[f] = sz - 1;
   }
@@ -61,39 +56,30 @@ struct DLX {
     int ret = 0;
     memset(vis, 0, sizeof(bool) * sz);
     TRAV(x, rg, head) {
-      if (vis[x])
-        continue;
+      if (vis[x]) continue;
       vis[x] = true, ++ret;
       TRAV(i, dn, x) TRAV(j, rg, i) vis[cl[j]] = true;
     }
     return ret;
   }
   void dfs(int dep) {
-    if (dep + (A ? 0 : h()) >= ans)
-      return;
-    if (rg[head] == head)
-      return ans = dep, void();
-    if (dn[rg[head]] == rg[head])
-      return;
+    if (dep + (A ? 0 : h()) >= ans) return;
+    if (rg[head] == head) return ans = dep, void();
+    if (dn[rg[head]] == rg[head]) return;
     int w = rg[head];
     TRAV(x, rg, head) if (s[x] < s[w]) w = x;
-    if (A)
-      remove(w);
+    if (A) remove(w);
     TRAV(i, dn, w) {
-      if (B)
-        remove(i);
+      if (B) remove(i);
       TRAV(j, rg, i) remove(A ? cl[j] : j);
       dfs(dep + 1);
       TRAV(j, lt, i) restore(A ? cl[j] : j);
-      if (B)
-        restore(i);
+      if (B) restore(i);
     }
-    if (A)
-      restore(w);
+    if (A) restore(w);
   }
   int solve() {
-    for (int i = 0; i < columns; ++i)
-      dn[bt[i]] = i, up[i] = bt[i];
+    for (int i = 0; i < columns; ++i) dn[bt[i]] = i, up[i] = bt[i];
     ans = 1e9, dfs(0);
     return ans;
   }

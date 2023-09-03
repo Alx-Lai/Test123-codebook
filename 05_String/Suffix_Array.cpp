@@ -1,24 +1,16 @@
-#include <bits/stdc++.h>
 #define FILL(x, y) memset(x, y, sizeof(x))
-using namespace std;
-
 struct suffix_array {
   int box[100007], tp[100007], m;
-  bool not_equ(int a, int b, int k, int n) {
-    return ra[a] != ra[b] || a + k >= n || b + k >= n || ra[a + k] != ra[b + k];
-  }
+  bool not_equ(int a, int b, int k, int n) { return ra[a] != ra[b] || a + k >= n || b + k >= n || ra[a + k] != ra[b + k]; }
   void radix(int *key, int *it, int *ot, int n) {
     fill_n(box, m, 0);
-    for (int i = 0; i < n; ++i)
-      ++box[key[i]];
+    for (int i = 0; i < n; ++i) ++box[key[i]];
     partial_sum(box, box + m, box);
-    for (int i = n - 1; i >= 0; --i)
-      ot[--box[key[it[i]]]] = it[i];
+    for (int i = n - 1; i >= 0; --i) ot[--box[key[it[i]]]] = it[i];
   }
   void make_sa(string s, int n) {
     int k = 1;
-    for (int i = 0; i < n; ++i)
-      ra[i] = s[i];
+    for (int i = 0; i < n; ++i) ra[i] = s[i];
     do {
       iota(tp, tp + k, n - k), iota(sa + k, sa + n, 0);
       radix(ra + k, sa + k, tp + k, n - k);
@@ -54,7 +46,6 @@ main() {
   suffix_array saa;
   saa.build(s);
   for (int i = 0; i <= s.length(); i++) {
-    cout << i << " " << saa.sa[i] << " " << saa.ra[i] << " " << saa.he[i]
-         << endl;
+    cout << i << " " << saa.sa[i] << " " << saa.ra[i] << " " << saa.he[i] << endl;
   }
 }

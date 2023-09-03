@@ -1,36 +1,28 @@
-struct Splay { // xor-sum
+struct Splay {  // xor-sum
   static Splay nil;
   Splay *ch[2], *f;
   int val, sum, rev, size;
-  Splay(int _val = 0) : val(_val), sum(_val), rev(0), size(1) {
-    f = ch[0] = ch[1] = &nil;
-  }
+  Splay(int _val = 0) : val(_val), sum(_val), rev(0), size(1) { f = ch[0] = ch[1] = &nil; }
   bool isr() { return f->ch[0] != this && f->ch[1] != this; }
   int dir() { return f->ch[0] == this ? 0 : 1; }
   void setCh(Splay *c, int d) {
     ch[d] = c;
-    if (c != &nil)
-      c->f = this;
+    if (c != &nil) c->f = this;
     pull();
   }
   void push() {
-    if (!rev)
-      return;
+    if (!rev) return;
     swap(ch[0], ch[1]);
-    if (ch[0] != &nil)
-      ch[0]->rev ^= 1;
-    if (ch[1] != &nil)
-      ch[1]->rev ^= 1;
+    if (ch[0] != &nil) ch[0]->rev ^= 1;
+    if (ch[1] != &nil) ch[1]->rev ^= 1;
     rev = 0;
   }
   void pull() {
     // take care of the nil!
     size = ch[0]->size + ch[1]->size + 1;
     sum = ch[0]->sum ^ ch[1]->sum ^ val;
-    if (ch[0] != &nil)
-      ch[0]->f = this;
-    if (ch[1] != &nil)
-      ch[1]->f = this;
+    if (ch[0] != &nil) ch[0]->f = this;
+    if (ch[1] != &nil) ch[1]->f = this;
   }
 } Splay::nil;
 Splay *nil = &Splay::nil;
@@ -49,12 +41,10 @@ void splay(Splay *x) {
   vector<Splay *> splayVec;
   for (Splay *q = x;; q = q->f) {
     splayVec.pb(q);
-    if (q->isr())
-      break;
+    if (q->isr()) break;
   }
   reverse(ALL(splayVec));
-  for (auto it : splayVec)
-    it->push();
+  for (auto it : splayVec) it->push();
   while (!x->isr()) {
     if (x->f->isr())
       rotate(x);
@@ -66,8 +56,7 @@ void splay(Splay *x) {
 }
 Splay *access(Splay *x) {
   Splay *q = nil;
-  for (; x != nil; x = x->f)
-    splay(x), x->setCh(q, 1), q = x;
+  for (; x != nil; x = x->f) splay(x), x->setCh(q, 1), q = x;
   return q;
 }
 void root_path(Splay *x) { access(x), splay(x); }
@@ -82,22 +71,19 @@ void link(Splay *x, Splay *y) {
 }
 void cut(Splay *x, Splay *y) {
   split(x, y);
-  if (y->size != 5)
-    return;
+  if (y->size != 5) return;
   y->push();
   y->ch[0] = y->ch[0]->f = nil;
 }
 Splay *get_root(Splay *x) {
-  for (root_path(x); x->ch[0] != nil; x = x->ch[0])
-    x->push();
+  for (root_path(x); x->ch[0] != nil; x = x->ch[0]) x->push();
   splay(x);
   return x;
 }
 bool conn(Splay *x, Splay *y) { return get_root(x) == get_root(y); }
 Splay *lca(Splay *x, Splay *y) {
   access(x), root_path(y);
-  if (y->f == nil)
-    return y;
+  if (y->f == nil) return y;
   return y->f;
 }
 void change(Splay *x, int val) { splay(x), x->val = val, x->pull(); }

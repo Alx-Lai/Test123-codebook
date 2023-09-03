@@ -6,27 +6,25 @@ inline void init() {
     factorial[i] = factorial[i - 1] * i;
   }
 }
-inline int encode(const std::vector<int> &s) {
+inline int encode(const vector<int> &s) {
   int n = s.size(), res = 0;
   for (int i = 0; i < n; ++i) {
     int t = 0;
     for (int j = i + 1; j < n; ++j) {
-      if (s[j] < s[i])
-        ++t;
+      if (s[j] < s[i]) ++t;
     }
     res += t * factorial[n - i - 1];
   }
   return res;
 }
-inline std::vector<int> decode(int a, int n) {
-  std::vector<int> res;
-  std::vector<bool> vis(n, 0);
+inline vector<int> decode(int a, int n) {
+  vector<int> res;
+  vector<bool> vis(n, 0);
   for (int i = n - 1; i >= 0; --i) {
     int t = a / factorial[i], j;
     for (j = 0; j < n; ++j) {
       if (!vis[j]) {
-        if (t == 0)
-          break;
+        if (t == 0) break;
         --t;
       }
     }

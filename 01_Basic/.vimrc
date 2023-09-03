@@ -10,9 +10,9 @@ set breakindent
 filetype indent on
 set smartcase
 inoremap {<CR> {<CR>}<Esc>ko
-set incsearch           " Enable incremental search
-set hlsearch            " Enable highlight search
-set mouse=a             " Enable mouse drag on window splits
+set incsearch
+set hlsearch
+set mouse=a
 
 map <F9> :call CompileRunGcc()<CR>
 func! CompileRunGcc()

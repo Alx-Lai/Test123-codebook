@@ -2,33 +2,26 @@ int Jacobi(int a, int m) {
   int s = 1;
   for (; m > 1;) {
     a %= m;
-    if (a == 0)
-      return 0;
+    if (a == 0) return 0;
     const int r = __builtin_ctz(a);
-    if ((r & 1) && ((m + 2) & 4))
-      s = -s;
+    if ((r & 1) && ((m + 2) & 4)) s = -s;
     a >>= r;
-    if (a & m & 2)
-      s = -s;
+    if (a & m & 2) s = -s;
     swap(a, m);
   }
   return s;
 }
 
 int QuadraticResidue(int a, int p) {
-  if (p == 2)
-    return a & 1;
+  if (p == 2) return a & 1;
   const int jc = Jacobi(a, p);
-  if (jc == 0)
-    return 0;
-  if (jc == -1)
-    return -1;
+  if (jc == 0) return 0;
+  if (jc == -1) return -1;
   int b, d;
   for (;;) {
     b = rand() % p;
     d = (1LL * b * b + p - a) % p;
-    if (Jacobi(d, p) == -1)
-      break;
+    if (Jacobi(d, p) == -1) break;
   }
   int f0 = b, f1 = 1, g0 = 1, g1 = 0, tmp;
   for (int e = (1LL + p) >> 1; e; e >>= 1) {

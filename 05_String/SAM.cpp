@@ -18,8 +18,7 @@ struct SAM {
     int p = lst;
     int np = newNode();
     mx[np] = mx[p] + 1;
-    for (; p && nxt[p][c] == 0; p = mom[p])
-      nxt[p][c] = np;
+    for (; p && nxt[p][c] == 0; p = mom[p]) nxt[p][c] = np;
     if (p == 0)
       mom[np] = root;
     else {
@@ -29,19 +28,16 @@ struct SAM {
       else {
         int nq = newNode();
         mx[nq] = mx[p] + 1;
-        for (int i = 0; i < 33; i++)
-          nxt[nq][i] = nxt[q][i];
+        for (int i = 0; i < 33; i++) nxt[nq][i] = nxt[q][i];
         mom[nq] = mom[q];
         mom[q] = nq;
         mom[np] = nq;
-        for (; p && nxt[p][c] == q; p = mom[p])
-          nxt[p][c] = nq;
+        for (; p && nxt[p][c] == q; p = mom[p]) nxt[p][c] = nq;
       }
     }
     lst = np;
   }
   void push(char *str) {
-    for (int i = 0; str[i]; i++)
-      push(str[i] - 'a' + 1);
+    for (int i = 0; str[i]; i++) push(str[i] - 'a' + 1);
   }
 } sam;

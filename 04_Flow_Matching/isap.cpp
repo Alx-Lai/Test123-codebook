@@ -21,8 +21,7 @@ struct Maxflow {
     G[v].push_back(Edge(u, 0, SZ(G[u]) - 1));
   }
   int dfs(int p, int flow) {
-    if (p == t)
-      return flow;
+    if (p == t) return flow;
     for (int &i = iter[p]; i < SZ(G[p]); i++) {
       Edge &e = G[p][i];
       if (e.c > 0 && d[p] == d[e.v] + 1) {

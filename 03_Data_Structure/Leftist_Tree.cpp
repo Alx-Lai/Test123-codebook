@@ -7,13 +7,10 @@ ll sz(node *p) { return p ? p->sz : 0; }
 ll V(node *p) { return p ? p->v : -1; }
 ll sum(node *p) { return p ? p->sum : 0; }
 node *merge(node *a, node *b) {
-  if (!a || !b)
-    return a ? a : b;
-  if (a->data < b->data)
-    swap(a, b);
+  if (!a || !b) return a ? a : b;
+  if (a->data < b->data) swap(a, b);
   a->r = merge(a->r, b);
-  if (V(a->r) > V(a->l))
-    swap(a->r, a->l);
+  if (V(a->r) > V(a->l)) swap(a->r, a->l);
   a->v = V(a->r) + 1, a->sz = sz(a->l) + sz(a->r) + 1;
   a->sum = sum(a->l) + sum(a->r) + a->data;
   return a;

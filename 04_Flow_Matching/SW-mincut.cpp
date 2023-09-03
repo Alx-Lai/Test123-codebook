@@ -1,5 +1,5 @@
 // global min cut
-struct SW { // O(V^3)
+struct SW {  // O(V^3)
   static const int MXN = 514;
   int n, vst[MXN], del[MXN];
   int edge[MXN][MXN], wei[MXN];
@@ -10,22 +10,18 @@ struct SW { // O(V^3)
     while (1) {
       int mx = -1, cur = 0;
       for (int i = 0; i < n; ++i)
-        if (!del[i] && !vst[i] && mx < wei[i])
-          cur = i, mx = wei[i];
-      if (mx == -1)
-        break;
+        if (!del[i] && !vst[i] && mx < wei[i]) cur = i, mx = wei[i];
+      if (mx == -1) break;
       vst[cur] = 1, s = t, t = cur;
       for (int i = 0; i < n; ++i)
-        if (!vst[i] && !del[i])
-          wei[i] += edge[cur][i];
+        if (!vst[i] && !del[i]) wei[i] += edge[cur][i];
     }
   }
   int solve() {
     int res = INF;
     for (int i = 0, x, y; i < n - 1; ++i) {
       search(x, y), res = min(res, wei[y]), del[y] = 1;
-      for (int j = 0; j < n; ++j)
-        edge[x][j] = (edge[j][x] += edge[y][j]);
+      for (int j = 0; j < n; ++j) edge[x][j] = (edge[j][x] += edge[y][j]);
     }
     return res;
   }

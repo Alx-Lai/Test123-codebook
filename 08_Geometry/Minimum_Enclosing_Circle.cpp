@@ -10,8 +10,7 @@ pdd Minimum_Enclosing_Circle(vector<pdd> dots, double &r) {
           cent = (dots[i] + dots[j]) / 2;
           r = abs(dots[i] - cent);
           for (int k = 0; k < j; ++k)
-            if (abs(dots[k] - cent) > r)
-              cent = excenter(dots[i], dots[j], dots[k], r);
+            if (abs(dots[k] - cent) > r) cent = excenter(dots[i], dots[j], dots[k], r);
         }
     }
   return cent;

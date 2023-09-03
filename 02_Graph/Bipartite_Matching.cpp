@@ -52,7 +52,6 @@ int hopcroft_karp() {
   int res = 0, i;
   while (bfs())
     for (i = 1; i <= nx; i++)
-      if (ma[i] == 0 && dfs(i))
-        res++;
+      if (ma[i] == 0 && dfs(i)) res++;
   return res;
 }

@@ -1,12 +1,11 @@
-struct GenMatch { // 1-base
+struct GenMatch {  // 1-base
   int V, pr[N];
   bool el[N][N], inq[N], inp[N], inb[N];
   int st, ed, nb, bk[N], djs[N], ans;
   void init(int _V) {
     V = _V;
     for (int i = 0; i <= V; ++i) {
-      for (int j = 0; j <= V; ++j)
-        el[i][j] = 0;
+      for (int j = 0; j <= V; ++j) el[i][j] = 0;
       pr[i] = bk[i] = djs[i] = 0;
       inq[i] = inp[i] = inb[i] = 0;
     }
@@ -30,21 +29,17 @@ struct GenMatch { // 1-base
     for (int v; djs[u] != nb;) {
       v = pr[u], inb[djs[u]] = inb[djs[v]] = true;
       u = bk[v];
-      if (djs[u] != nb)
-        bk[u] = v;
+      if (djs[u] != nb) bk[u] = v;
     }
   }
   void blo(int u, int v, queue<int> &qe) {
     nb = lca(u, v), fill_n(inb, V + 1, 0);
     upd(u), upd(v);
-    if (djs[u] != nb)
-      bk[u] = v;
-    if (djs[v] != nb)
-      bk[v] = u;
+    if (djs[u] != nb) bk[u] = v;
+    if (djs[v] != nb) bk[v] = u;
     for (int tu = 1; tu <= V; ++tu)
       if (inb[djs[tu]])
-        if (djs[tu] = nb, !inq[tu])
-          qe.push(tu), inq[tu] = 1;
+        if (djs[tu] = nb, !inq[tu]) qe.push(tu), inq[tu] = 1;
   }
   void flow() {
     fill_n(inq + 1, V, 0), fill_n(bk + 1, V, 0);
@@ -60,8 +55,7 @@ struct GenMatch { // 1-base
             blo(u, v, qe);
           else if (!bk[v]) {
             if (bk[v] = u, pr[v] > 0) {
-              if (!inq[pr[v]])
-                qe.push(pr[v]);
+              if (!inq[pr[v]]) qe.push(pr[v]);
             } else
               return ed = v, void();
           }
@@ -69,15 +63,13 @@ struct GenMatch { // 1-base
     }
   }
   void aug() {
-    for (int u = ed, v, w; u > 0;)
-      v = bk[u], w = pr[v], pr[v] = u, pr[u] = v, u = w;
+    for (int u = ed, v, w; u > 0;) v = bk[u], w = pr[v], pr[v] = u, pr[u] = v, u = w;
   }
   int solve() {
     fill_n(pr, V + 1, 0), ans = 0;
     for (int u = 1; u <= V; ++u)
       if (!pr[u])
-        if (st = u, flow(), ed > 0)
-          aug(), ++ans;
+        if (st = u, flow(), ed > 0) aug(), ++ans;
     return ans;
   }
 };

@@ -3,26 +3,23 @@
 #define U 2
 const int mov[3][2] = {0, -1, -1, -1, -1, 0};
 int al, bl;
-char a[MAXL * 2], b[MAXL * 2]; // 0-indexed
+char a[MAXL * 2], b[MAXL * 2];  // 0-indexed
 int dp[MAXL * 2][MAXL];
 char pred[MAXL * 2][MAXL];
 inline int lcs_length(int r) {
   int i = r + al, j = bl, l = 0;
   while (i > r) {
     char dir = pred[i][j];
-    if (dir == LU)
-      l++;
+    if (dir == LU) l++;
     i += mov[dir][0];
     j += mov[dir][1];
   }
   return l;
 }
-inline void reroot(int r) { // r = new base row
+inline void reroot(int r) {  // r = new base row
   int i = r, j = 1;
-  while (j <= bl && pred[i][j] != LU)
-    j++;
-  if (j > bl)
-    return;
+  while (j <= bl && pred[i][j] != LU) j++;
+  if (j > bl) return;
   pred[i][j] = L;
   while (i < 2 * al && j <= bl) {
     if (pred[i + 1][j] == U) {

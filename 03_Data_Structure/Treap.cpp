@@ -14,16 +14,13 @@ inline void pull(Treap *t) { t->sz = size(t->lc) + 1 + size(t->rc); }
 void push(Treap *t) {
   if (t->tag) {
     swap(t->lc, t->rc);
-    if (t->lc)
-      t->lc->tag = !t->lc->tag;
-    if (t->rc)
-      t->rc->tag = !t->rc->tag;
+    if (t->lc) t->lc->tag = !t->lc->tag;
+    if (t->rc) t->rc->tag = !t->rc->tag;
     t->tag = 0;
   }
 }
 Treap *merge(Treap *a, Treap *b) {
-  if (!a || !b)
-    return a ? a : b;
+  if (!a || !b) return a ? a : b;
   if (a->pri > b->pri) {
     push(a);
     a->rc = merge(a->rc, b);

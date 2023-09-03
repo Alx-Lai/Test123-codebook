@@ -1,18 +1,19 @@
 #ifndef REFERENCE_POINTER
 #define REFERENCE_POINTER
-template <typename T> struct _RefCounter {
+template <typename T>
+struct _RefCounter {
   T data;
   int ref;
   _RefCounter(const T &d = 0) : data(d), ref(0) {}
 };
-template <typename T> struct reference_pointer {
+template <typename T>
+struct reference_pointer {
   _RefCounter<T> *p;
   T *operator->() { return &p->data; }
   T &operator*() { return p->data; }
   operator _RefCounter<T> *() { return p; }
   reference_pointer &operator=(const reference_pointer &t) {
-    if (p && !--p->ref)
-      delete p;
+    if (p && !--p->ref) delete p;
     p = t.p;
     p && ++p->ref;
     return *this;
@@ -20,11 +21,11 @@ template <typename T> struct reference_pointer {
   reference_pointer(_RefCounter<T> *t = 0) : p(t) { p && ++p->ref; }
   reference_pointer(const reference_pointer &t) : p(t.p) { p && ++p->ref; }
   ~reference_pointer() {
-    if (p && !--p->ref)
-      delete p;
+    if (p && !--p->ref) delete p;
   }
 };
-template <typename T> inline reference_pointer<T> new_reference(const T &nd) {
+template <typename T>
+inline reference_pointer<T> new_reference(const T &nd) {
   return reference_pointer<T>(new _RefCounter<T>(nd));
 }
 #endif

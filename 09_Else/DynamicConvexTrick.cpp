@@ -20,12 +20,9 @@ struct DynamicHull : multiset<Line, less<>> {
   }
   void addline(ll a, ll b) {
     auto z = insert({a, b, 0}), y = z++, x = y;
-    while (isect(y, z))
-      z = erase(z);
-    if (x != begin() && isect(--x, y))
-      isect(x, y = erase(y));
-    while ((y = x) != begin() && (--x)->p >= y->p)
-      isect(x, erase(y));
+    while (isect(y, z)) z = erase(z);
+    if (x != begin() && isect(--x, y)) isect(x, y = erase(y));
+    while ((y = x) != begin() && (--x)->p >= y->p) isect(x, erase(y));
   }
   ll query(ll x) {
     auto l = *lower_bound(x);

@@ -10,8 +10,7 @@ void dijkstra(int s) {
   while (pq.size()) {
     int now = pq.top().Y;
     pq.pop();
-    if (vis[now])
-      continue;
+    if (vis[now]) continue;
     vis[now] = 1;
     for (pii e : edge[now]) {
       if (!vis[e.X] && dis[e.X] > dis[now] + e.Y) {

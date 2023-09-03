@@ -1,5 +1,5 @@
 const int MAXN = 40005;
-vector<int> G[MAXN]; // 1-base
+vector<int> G[MAXN];  // 1-base
 int n, B, arr[MAXN], ans[100005], cur_ans;
 int in[MAXN], out[MAXN], dfn[MAXN * 2], dft;
 int deep[MAXN], sp[__lg(MAXN * 2) + 1][MAXN * 2], bln[MAXN], spt;
@@ -8,8 +8,7 @@ struct QUERY {
   int L, R, Lid, id, lca;
   QUERY(int l, int r, int _id) : L(l), R(r), lca(0), id(_id) {}
   bool operator<(const QUERY &b) {
-    if (Lid != b.Lid)
-      return Lid < b.Lid;
+    if (Lid != b.Lid) return Lid < b.Lid;
     return R < b.R;
   }
 };
@@ -18,17 +17,14 @@ void dfs(int u, int f, int d) {
   deep[u] = d, sp[0][spt] = u, bln[u] = spt++;
   dfn[dft] = u, in[u] = dft++;
   for (int v : G[u])
-    if (v != f)
-      dfs(v, u, d + 1), sp[0][spt] = u, bln[u] = spt++;
+    if (v != f) dfs(v, u, d + 1), sp[0][spt] = u, bln[u] = spt++;
   dfn[dft] = u, out[u] = dft++;
 }
 int lca(int u, int v) {
-  if (bln[u] > bln[v])
-    swap(u, v);
+  if (bln[u] > bln[v]) swap(u, v);
   int t = __lg(bln[v] - bln[u] + 1);
   int a = sp[t][bln[u]], b = sp[t][bln[v] - (1 << t) + 1];
-  if (deep[a] < deep[b])
-    return a;
+  if (deep[a] < deep[b]) return a;
   return b;
 }
 void sub(int x) {}
@@ -61,18 +57,12 @@ void solve() {
   sort(ALL(query));
   int L = 0, R = -1;
   for (auto q : query) {
-    while (R < q.R)
-      flip(dfn[++R]);
-    while (L > q.L)
-      flip(dfn[--L]);
-    while (R > q.R)
-      flip(dfn[R--]);
-    while (L < q.L)
-      flip(dfn[L++]);
-    if (q.lca)
-      add(arr[q.lca]);
+    while (R < q.R) flip(dfn[++R]);
+    while (L > q.L) flip(dfn[--L]);
+    while (R > q.R) flip(dfn[R--]);
+    while (L < q.L) flip(dfn[L++]);
+    if (q.lca) add(arr[q.lca]);
     ans[q.id] = cur_ans;
-    if (q.lca)
-      sub(arr[q.lca]);
+    if (q.lca) sub(arr[q.lca]);
   }
 }

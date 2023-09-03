@@ -9,30 +9,25 @@ struct Edge {
   Edge(int _id = 0) : id(_id) {}
 };
 int inCircle(pddi a, pddi b, pddi c, pddi p) {
-  if (ori(a.p, b.p, c.p) < 0)
-    swap(b, c);
+  if (ori(a.p, b.p, c.p) < 0) swap(b, c);
   Point a3(a.p), b3(b.p), c3(c.p), p3(p.p);
   b3 = b3 - a3, c3 = c3 - a3, p3 = p3 - a3;
-  Point f = cross(b3, c3); // normal vector
-  return sign(dot(p3, f)); // check same direction, in: < 0, on: = 0, out: > 0
+  Point f = cross(b3, c3);  // normal vector
+  return sign(dot(p3, f));  // check same direction, in: < 0, on: = 0, out: > 0
 }
-int intersection(pddi a, pddi b, pddi c, pddi d) { // seg(a, b) and seg(c, d)
-  return ori(a.p, c.p, b.p) * ori(a.p, b.p, d.p) > 0 &&
-         ori(c.p, a.p, d.p) * ori(c.p, d.p, b.p) > 0;
+int intersection(pddi a, pddi b, pddi c, pddi d) {  // seg(a, b) and seg(c, d)
+  return ori(a.p, c.p, b.p) * ori(a.p, b.p, d.p) > 0 && ori(c.p, a.p, d.p) * ori(c.p, d.p, b.p) > 0;
 }
-struct Delaunay {     // 0-base
-  list<Edge> head[N]; // graph
+struct Delaunay {      // 0-base
+  list<Edge> head[N];  // graph
   pddi p[N];
   int n, rename[N];
   void init(int _n, pddi _p[]) {
     n = _n;
-    for (int i = 0; i < n; ++i)
-      head[i].clear();
-    for (int i = 0; i < n; ++i)
-      p[i] = _p[i];
+    for (int i = 0; i < n; ++i) head[i].clear();
+    for (int i = 0; i < n; ++i) p[i] = _p[i];
     sort(p, p + n, [&](pddi a, pddi b) { return a.p < b.p; });
-    for (int i = 0; i < n; ++i)
-      rename[p[i].id] = i;
+    for (int i = 0; i < n; ++i) rename[p[i].id] = i;
     divide(0, n - 1);
   }
   void addEdge(int u, int v) {
@@ -42,10 +37,8 @@ struct Delaunay {     // 0-base
     head[v].begin()->twin = head[u].begin();
   }
   void divide(int l, int r) {
-    if (l == r)
-      return;
-    if (l + 1 == r)
-      return addEdge(l, l + 1);
+    if (l == r) return;
+    if (l + 1 == r) return addEdge(l, l + 1);
     int mid = (l + r) >> 1;
     divide(l, mid), divide(mid + 1, r);
     int nowl = l, nowr = r;
@@ -60,8 +53,7 @@ struct Delaunay {     // 0-base
           break;
         }
       }
-      if (update)
-        continue;
+      if (update) continue;
       for (auto it : head[nowr]) {
         pddi t = p[it.id];
         int v = ori(ptL.p, ptR.p, t.p);
@@ -71,20 +63,15 @@ struct Delaunay {     // 0-base
         }
       }
     }
-    addEdge(nowl, nowr); // add tangent
+    addEdge(nowl, nowr);  // add tangent
     while (true) {
       pddi ptL = p[nowl], ptR = p[nowr];
       int ch = -1, side = 0;
       for (auto it : head[nowl])
-        if (ori(ptL.p, ptR.p, p[it.id].p) > 0 &&
-            (ch == -1 || inCircle(ptL, ptR, p[ch], p[it.id]) < 0))
-          ch = it.id, side = -1;
+        if (ori(ptL.p, ptR.p, p[it.id].p) > 0 && (ch == -1 || inCircle(ptL, ptR, p[ch], p[it.id]) < 0)) ch = it.id, side = -1;
       for (auto it : head[nowr])
-        if (ori(ptR.p, p[it.id].p, ptL.p) > 0 &&
-            (ch == -1 || inCircle(ptL, ptR, p[ch], p[it.id]) < 0))
-          ch = it.id, side = 1;
-      if (ch == -1)
-        break; // upper common tangent
+        if (ori(ptR.p, p[it.id].p, ptL.p) > 0 && (ch == -1 || inCircle(ptL, ptR, p[ch], p[it.id]) < 0)) ch = it.id, side = 1;
+      if (ch == -1) break;  // upper common tangent
       if (side == -1) {
         for (auto it = head[nowl].begin(); it != head[nowl].end();)
           if (intersection(ptL, p[it->id], ptR, p[ch]))
@@ -106,8 +93,7 @@ struct Delaunay {     // 0-base
     vector<pii> ret;
     for (int i = 0; i < n; ++i)
       for (auto it : head[i])
-        if (it.id >= i)
-          ret.pb(pii(p[i].id, p[it.id].id));
+        if (it.id >= i) ret.pb(pii(p[i].id, p[it.id].id));
     return ret;
   }
 } tool;

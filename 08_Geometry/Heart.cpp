@@ -14,9 +14,8 @@ pdd incenter(pdd p1, pdd p2, pdd p3, double &radius) {
   return radius = area / s, intersect(p1, p1 + L1, p2, p2 + L2),
 }
 
-pdd escenter(pdd p1, pdd p2, pdd p3) { // 213
-  pdd L1 = external_bisector(p1, p2, p3),
-      L2 = external_bisector(p2, p2 + p2 - p1, p3);
+pdd escenter(pdd p1, pdd p2, pdd p3) {  // 213
+  pdd L1 = external_bisector(p1, p2, p3), L2 = external_bisector(p2, p2 + p2 - p1, p3);
   return intersect(p1, p1 + L1, p2, p2 + L2);
 }
 

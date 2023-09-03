@@ -7,15 +7,13 @@ void push(int id, int l, int r) {
   tag[id] = 0;
 }
 void modify(int id, int l, int r, int ql, int qr, int val) {
-  if (ql > r || qr < l)
-    return;
+  if (ql > r || qr < l) return;
   if (ql <= l && r <= qr) {
     seg[id] += val * (r - l + 1);
     tag[id] += val;
     return;
   }
-  if (l == r)
-    return;
+  if (l == r) return;
   push(id, l, r);
   int mid = (l + r) >> 1;
   modify(id * 2, l, mid, ql, qr, val);
@@ -23,10 +21,8 @@ void modify(int id, int l, int r, int ql, int qr, int val) {
   seg[id] = seg[id * 2] + seg[id * 2 + 1];
 }
 int query(int id, int l, int r, int ql, int qr) {
-  if (ql > r || qr < l)
-    return 0;
-  if (ql <= l && r <= qr)
-    return seg[id];
+  if (ql > r || qr < l) return 0;
+  if (ql <= l && r <= qr) return seg[id];
   push(id, l, r);
   int mid = (l + r) >> 1;
   return query(id * 2, l, mid, ql, qr) + query(id * 2 + 1, mid + 1, r, ql, qr);

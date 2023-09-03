@@ -1,15 +1,13 @@
-struct Gomory_Hu_tree { // 0-base
+struct Gomory_Hu_tree {  // 0-base
   MaxFlow Dinic;
   int n;
   vector<pii> G[MAXN];
   void init(int _n) {
     n = _n;
-    for (int i = 0; i < n; ++i)
-      G[i].clear();
+    for (int i = 0; i < n; ++i) G[i].clear();
   }
   void solve(vector<int> &v) {
-    if (v.size() <= 1)
-      return;
+    if (v.size() <= 1) return;
     int s = rand() % SZ(v);
     swap(v.back(), v[s]), s = v.back();
     int t = v[rand() % (SZ(v) - 1)];
@@ -25,9 +23,8 @@ struct Gomory_Hu_tree { // 0-base
   }
   void build() {
     vector<int> v(n);
-    for (int i = 0; i < n; ++i)
-      v[i] = i;
+    for (int i = 0; i < n; ++i) v[i] = i;
     solve(v);
   }
-} ght; // test by BZOJ 4519
+} ght;  // test by BZOJ 4519
 MaxFlow &Dinic = ght.Dinic;

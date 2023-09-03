@@ -3,16 +3,13 @@ struct Maximum_Clique {
   bst N[MAXN], empty;
   int p[MAXN], n, ans;
   void BronKerbosch2(bst R, bst P, bst X) {
-    if (P == empty && X == empty)
-      return ans = max(ans, (int)R.count()), void();
+    if (P == empty && X == empty) return ans = max(ans, (int)R.count()), void();
     bst tmp = P | X;
     int u;
-    if ((R | P | X).count() <= ans)
-      return;
+    if ((R | P | X).count() <= ans) return;
     for (int uu = 0; uu < n; ++uu) {
       u = p[uu];
-      if (tmp[u] == 1)
-        break;
+      if (tmp[u] == 1) break;
     }
     // if (double(clock())/CLOCKS_PER_SEC > .999)
     // return;
@@ -28,15 +25,13 @@ struct Maximum_Clique {
   }
   void init(int _n) {
     n = _n;
-    for (int i = 0; i < n; ++i)
-      N[i].reset();
+    for (int i = 0; i < n; ++i) N[i].reset();
   }
   void add_edge(int u, int v) { N[u][v] = N[v][u] = 1; }
-  int solve() { // remember srand
+  int solve() {  // remember srand
     bst R, P, X;
     ans = 0, P.flip();
-    for (int i = 0; i < n; ++i)
-      p[i] = i;
+    for (int i = 0; i < n; ++i) p[i] = i;
     random_shuffle(p, p + n), BronKerbosch2(R, P, X);
     return ans;
   }

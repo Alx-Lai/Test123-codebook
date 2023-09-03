@@ -26,26 +26,21 @@ struct LiChao_min {
     }
     LL trl = nd->f.eval(l), trr = nd->f.eval(r);
     LL vl = v.eval(l), vr = v.eval(r);
-    if (trl <= vl && trr <= vr)
-      return;
+    if (trl <= vl && trr <= vr) return;
     if (trl > vl && trr > vr) {
       nd->f = v;
       return;
     }
-    if (trl > vl)
-      swap(nd->f, v);
+    if (trl > vl) swap(nd->f, v);
     if (nd->f.eval(mid) < v.eval(mid))
       insert(v, mid + 1, r, nd->r);
     else
       swap(nd->f, v), insert(v, l, mid, nd->l);
   }
   LL query(int x, int l, int r, pnode &nd) {
-    if (!nd)
-      return LLONG_MAX;
-    if (l == r)
-      return nd->f.eval(x);
-    if (mid >= x)
-      return min(nd->f.eval(x), query(x, l, mid, nd->l));
+    if (!nd) return LLONG_MAX;
+    if (l == r) return nd->f.eval(x);
+    if (mid >= x) return min(nd->f.eval(x), query(x, l, mid, nd->l));
     return min(nd->f.eval(x), query(x, mid + 1, r, nd->r));
   }
   /* -sz <= query_x <= sz */
