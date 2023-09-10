@@ -1,11 +1,20 @@
-// does not work when n is prime
-ll f(ll x, ll mod) { return add(mul(x, x, mod), 1, mod); }
-ll pollard_rho(ll n) {
-  if (!(n & 1)) return 2;
-  while (1) {
-    ll y = 2, x = rand() % (n - 1) + 1, res = 1;
-    for (int sz = 2; res == 1; y = x, sz *= 2)
-      for (int i = 0; i < sz && res <= 1; ++i) x = f(x, n), res = __gcd(abs(x - y), n);
-    if (res != 0 && res != n) return res;
+// n is prime -> miller_rabin
+// qpow need int128
+ll Pollard_Rho(ll x) {
+  ll s = 0, t = 0;
+  ll c = (ll)rand() % (x - 1) + 1;
+  int step = 0, goal = 1;
+  ll val = 1;
+  for (goal = 1;; goal *= 2, s = t, val = 1) {
+    for (step = 1; step <= goal; ++step) {
+      t = (qpow(t, 2, x) + c) % x;
+      val = (__int128)val * abs(t - s) % x;
+      if ((step % 127) == 0) {
+        ll d = __gcd(val, x);
+        if (d > 1) return d;
+      }
+    }
+    ll d = __gcd(val, x);
+    if (d > 1) return d;
   }
 }
