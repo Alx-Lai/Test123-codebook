@@ -1,41 +1,40 @@
-//(2^16)+1, 65537, 3
-// 7*17*(2^23)+1, 998244353, 3
-// 1255*(2^20)+1, 1315962881, 3
-// 51*(2^25)+1, 1711276033, 29
-template <int MAXN, LL P, LL RT>  // MAXN must be 2^k
-struct NTT {
-  LL w[MAXN];
-  LL mpow(LL a, LL n);
-  LL minv(LL a) { return mpow(a, P - 2); }
-  NTT() {
-    LL dw = mpow(RT, (P - 1) / MAXN);
-    w[0] = 1;
-    for (int i = 1; i < MAXN; ++i) w[i] = w[i - 1] * dw % P;
-  }
-  void bitrev(LL *a, int n) {
-    int i = 0;
-    for (int j = 1; j < n - 1; ++j) {
-      for (int k = n >> 1; (i ^= k) < k; k >>= 1)
-        ;
-      if (j < i) swap(a[i], a[j]);
+ll r[MAXN], A[MAXN], B[MAXN], C[MAXN];
+void ntt(ll x[], ll lim, int opt) {
+  for (int i = 0; i < lim; i++) {
+    if (r[i] < i) {
+      swap(x[i], x[r[i]]);
     }
   }
-  void operator()(LL *a, int n, bool inv = false) {  // 0 <= a[i] < P
-    bitrev(a, n);
-    for (int L = 2; L <= n; L <<= 1) {
-      int dx = MAXN / L, dl = L >> 1;
-      for (int i = 0; i < n; i += L) {
-        for (int j = i, x = 0; j < i + dl; ++j, x += dx) {
-          LL tmp = a[j + dl] * w[x] % P;
-          if ((a[j + dl] = a[j] - tmp) < 0) a[j + dl] += P;
-          if ((a[j] += tmp) >= P) a[j] -= P;
-        }
+  int m, k;
+  ll gn, g, tmp;
+  for (int m = 2; m <= lim; m <<= 1) {
+    k = m >> 1;
+    gn = qpow(3, (p - 1) / m);
+    for (int i = 0; i < lim; i += m) {
+      g = 1;
+      for (int j = 0; j < k; j++, g = g * gn % p) {
+        tmp = x[i + j + k] * g % p;
+        x[i + j + k] = (x[i + j] - tmp + p) % p;
+        x[i + j] = (x[i + j] + tmp) % p;
       }
     }
-    if (inv) {
-      reverse(a + 1, a + n);
-      LL invn = minv(n);
-      for (int i = 0; i < n; ++i) a[i] = a[i] * invn % P;
-    }
   }
-};
+  if (opt == -1) {
+    reverse(x + 1, x + lim);
+    ll inv = qpow(lim, p - 2);
+    for (int i = 0; i < lim; i++) x[i] = x[i] * inv % p;
+  }
+}
+void calc() {
+  cin >> n >> m;
+  for (int i = 0; i < n; i++) cin >> A[i];
+  for (int i = 0; i < m; i++) cin >> B[i];
+  while (lim < (n << 1)) lim <<= 1;
+  while (lim < (m << 1)) lim <<= 1;
+  for (int i = 0; i < lim; i++) r[i] = (i & 1) * (lim >> 1) + (r[i >> 1] >> 1);
+  ntt(A, lim, 1);
+  ntt(B, lim, 1);
+  for (int i = 0; i < lim; i++) C[i] = (A[i] * B[i]) % p;
+  ntt(C, lim, -1);
+  for (int i = 0; i < n + m - 1; i++) cout << C[i] << ' ';
+}

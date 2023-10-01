@@ -3,3 +3,4 @@ codebook.log
 codebook.toc
 */*.exe
 */*.out
+.vscode/
