@@ -1,5 +1,5 @@
 const int len = 400000, sigma = 26;
-struct AC_Automatan {
+struct AC_Automaton {
   int nx[len][sigma], fl[len], cnt[len], pri[len], top;
   int newnode() {
     fill(nx[top], nx[top] + sigma, -1);
