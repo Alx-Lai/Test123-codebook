@@ -6,7 +6,7 @@ int mex(vector<int> &v) {
   return r;
 }
 int solve() {
-  // dp = mex(all(subplate1 ^ subplate2))
+  // dp = mex(xor(subplates))
   if (dp == 0)
     ;  // Lose
   else
