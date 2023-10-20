@@ -13,3 +13,4 @@ signed main() {
   cin.tie(0);
   return 0;
 }
+// for i in {A..J}; do cp default.cpp $i.cpp; done;
