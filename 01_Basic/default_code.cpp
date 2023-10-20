@@ -4,7 +4,7 @@ typedef long long ll;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 #define debug(x) \
-  { cerr << #x << " = " << x << '\n'; }
+  { cerr << #x " = " << x << '\n'; }
 #define X first
 #define Y second
 #define pb push_back
